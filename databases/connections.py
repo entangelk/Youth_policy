@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    API_KEY : Optional[str] = None
     DATABASE_URL: Optional[str] = None
     CONTAINER_PREFIX : Optional[str] = None
     async def initialize_database(self):
