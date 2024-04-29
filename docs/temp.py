@@ -26,6 +26,34 @@ content = response.content.decode('utf-8')  # 이진 데이터를 UTF-8로 디�
 root = ET.fromstring(content)  # XML 문자열을 파싱하여 ElementTree 객체로 변환
 
 
+# 필드 이름과 값을 저장할 딕셔너리
+data = {}
+
+# 각 요소에서 필드 이름과 값을 추출하여 딕셔너리에 저장
+for policy in root.findall('youthPolicy'):
+    policy_data = {}
+    for elem in policy:
+        if elem.tag != 'rnum':  # rnum은 필요없으므로 제외
+            policy_data[elem.tag] = elem.text
+    data[policy.find('rnum').text] = policy_data
+
+    ## 여기 태그 부분을 사용하면 쉽게 뽑아낼 수 있겠다. 여길 건들여 보는걸로
+
+# 출력할 헤더
+headers = ["항목", "타입", "설명"]
+
+# 표 형식으로 출력
+print("|", " | ".join(headers), "|")
+print("|", " | ".join(["-" * len(header) for header in headers]), "|")
+
+# 딕셔너리의 데이터를 표 형식으로 출력
+for num, policy_data in data.items():
+    for field, value in policy_data.items():
+        print("|", field, "| String |", value, "|")
+    print()
+
+
+'''
 # <youthPolicy> 요소 반복하여 값 추출
 for policy in root.findall('youthPolicy'):
     biz_id = policy.find('bizId').text
@@ -39,7 +67,7 @@ for policy in root.findall('youthPolicy'):
     print("polyItcnCn:", itcn_cn)
     print("sporCn:", spor_cn)
     print()  # 개행 추가하여 각 정책의 정보를 구분합니다.
-
+'''
 
 
 
